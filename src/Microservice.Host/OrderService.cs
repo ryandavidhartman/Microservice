@@ -1,20 +1,44 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using ServiceStack;
+using ServiceStack.Caching;
 
 namespace Microservice.Host
 {
     public class OrderService : Service
     {
-        private List<Order> _orders;
+        private static List<Order> _orders;
 
         public OrderService()
         {
-            _orders = new List<Order>();
+            if(_orders == null)
+                _orders = new List<Order>();
         }
 
         public object Get(GetOrders request)
         {
-            return new List<Order>();
+            if (request.Ids != null && request.Ids.Count > 0)
+            {
+                var results = _orders.Where(i => request.Ids.Contains(i.Id)).ToList();
+                return results;
+            }
+            
+            if (request.CusomterIds != null && request.CusomterIds.Count > 1)
+            {
+                var results = _orders.Where(i => request.CusomterIds.Contains(i.CustomerId)).ToList();
+                return results;
+            }
+
+            if (request.ItemIds != null && request.ItemIds.Count > 1)
+            {
+                var results = _orders.Where(i => request.ItemIds.Intersect(i.ItemIds).Any()).ToList();
+                return results;
+            }
+
+
+            
+            return _orders;
+            
         }
 
         public object Post(Order data)
