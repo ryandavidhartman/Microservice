@@ -58,6 +58,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppHost.cs" />
+    <Compile Include="GetOrders.cs" />
+    <Compile Include="Order.cs" />
+    <Compile Include="OrderService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
